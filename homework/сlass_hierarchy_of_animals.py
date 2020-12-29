@@ -4,8 +4,8 @@
 class Carnivora:
     sound: str
 
-    def __init__(self):
-        self.name = input('Name of animal: ')
+    def __init__(self, animal_name):
+        self.name = animal_name
 
     def make_a_sound(self):
         print(self.sound)

@@ -7,7 +7,7 @@ class MetaCheburek(type):
         return class_obj
 
 
-class food:
+class Food:
     pass
 
 
