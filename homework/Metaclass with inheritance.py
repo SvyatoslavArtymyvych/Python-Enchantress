@@ -11,8 +11,7 @@ class Food:
     pass
 
 
-class Cheburek(food,
-               metaclass=MetaCheburek):
+class Cheburek(food, metaclass=MetaCheburek):
     pass
 
 
