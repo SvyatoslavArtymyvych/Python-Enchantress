@@ -11,10 +11,7 @@ class Laptop:
     def __init__(self):
         self.keys = [Key(f'Key {i}') for i in range(101)]
 
-
-Laptop()
-
-
+        
 # aggregation
 class String:
     type:str
@@ -27,6 +24,9 @@ class Guitare:
     def __init__(self, strings_list):
         self.strings_list = strings_list
 
-
-strings = [String('guitar_string') for i in range(7)]
-Guitare(strings)
+if __name__ == "__main__": 
+    # composition
+    Laptop()
+    # aggregation
+    strings = [String('guitar_string') for i in range(7)]
+    Guitare(strings)
