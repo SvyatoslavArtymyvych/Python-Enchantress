@@ -92,20 +92,80 @@ class TestHenHouse(unittest.TestCase):
                          * self.house._productivity_index()))
 
     @patch('hen_class.HenHouse.season', 'winter')
-    def test_get_max_count_for_soup(self):
+    def test_get_max_count_for_soup_winter(self):
         # call get_max_count_for_soup with expected_eggs number and check that correct number is returned
 
         # Note: make sure to mock _productivity_index or season
         # in order not to call datetime.datetime.today().month, since it is going to be dynamic value in the future
         # test eggs count
-        test_house = HenHouse(20)
+        expected_eggs = 4
+        hen_count = 20
+        test_house = HenHouse(hen_count)
+
         self.assertEqual(
-            test_house.get_max_count_for_soup(4),
-            int((test_house.get_eggs_daily(test_house.hen_count)
-                - 4)
-                / test_house.hens_productivity[test_house.season]
+            test_house.get_max_count_for_soup(expected_eggs),
+            int((int(hen_count * test_house._productivity_index())
+                - expected_eggs)
+                / test_house.hens_productivity['winter']
             )
         )
+
+    @patch('hen_class.HenHouse.season', 'summer')
+    def test_get_max_count_for_soup_summer(self):
+        # call get_max_count_for_soup with expected_eggs number and check that correct number is returned
+
+        # Note: make sure to mock _productivity_index or season
+        # in order not to call datetime.datetime.today().month, since it is going to be dynamic value in the future
+        # test eggs count
+        expected_eggs = 4
+        hen_count = 20
+        test_house = HenHouse(hen_count)
+
+        self.assertEqual(
+                test_house.get_max_count_for_soup(expected_eggs),
+                int((int(hen_count * test_house._productivity_index())
+                     - expected_eggs)
+                    / test_house.hens_productivity['summer']
+                    )
+                )
+
+    @patch('hen_class.HenHouse.season', 'autumn')
+    def test_get_max_count_for_soup_autumn(self):
+        # call get_max_count_for_soup with expected_eggs number and check that correct number is returned
+
+        # Note: make sure to mock _productivity_index or season
+        # in order not to call datetime.datetime.today().month, since it is going to be dynamic value in the future
+        # test eggs count
+        expected_eggs = 4
+        hen_count = 20
+        test_house = HenHouse(hen_count)
+
+        self.assertEqual(
+                test_house.get_max_count_for_soup(expected_eggs),
+                int((int(hen_count * test_house._productivity_index())
+                     - expected_eggs)
+                    / test_house.hens_productivity['autumn']
+                    )
+                )
+
+    @patch('hen_class.HenHouse.season', 'spring')
+    def test_get_max_count_for_soup_spring(self):
+        # call get_max_count_for_soup with expected_eggs number and check that correct number is returned
+
+        # Note: make sure to mock _productivity_index or season
+        # in order not to call datetime.datetime.today().month, since it is going to be dynamic value in the future
+        # test eggs count
+        expected_eggs = 4
+        hen_count = 20
+        test_house = HenHouse(hen_count)
+
+        self.assertEqual(
+                test_house.get_max_count_for_soup(expected_eggs),
+                int((int(hen_count * test_house._productivity_index())
+                     - expected_eggs)
+                    / test_house.hens_productivity['spring']
+                    )
+                )
 
     def test_get_max_count_for_soup_returns_zero(self):
         # call get_max_count_for_soup with expected_eggs number bigger than get_eggs_daily(self.hen_count)
