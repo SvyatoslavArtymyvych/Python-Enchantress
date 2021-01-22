@@ -11,7 +11,7 @@ class TestCalc(unittest.TestCase):
             multiply('22', '22')
         self.assertEqual(multiply('22', 4), '22'*4)
 
-    def test_number_multiply(self):
+    def test_number_multiply_one(self):
         # test number case
         # multiply 1 on number
         self.assertEqual(multiply(1, 1), 1)
@@ -22,22 +22,42 @@ class TestCalc(unittest.TestCase):
         self.assertEqual(multiply(0.5, 1), 0.5)
         self.assertEqual(multiply(2, 1), 2)
 
-        # multiply 0 on number
-        self.assertEqual(multiply(0, 5), 0)
-        self.assertEqual(multiply(5, 0), 0)
+        self.assertNotEqual(multiply(2, 1), 3)
 
-        self.assertEqual(multiply(5, 5), 25)
 
+    def test_number_multiply_float(self):
+        # test number case
         # multiply int on float
         self.assertEqual(multiply(2, 0.5), 1)
         self.assertEqual(multiply(0.5, 2), 1)
 
+        self.assertNotEqual(multiply(0.5, 2), 2)
+
+
+    def test_number_multiply_neg_int(self):
+        # test number case
         # multiply int on negative int
         self.assertEqual(multiply(2, -1), -2)
         self.assertEqual(multiply(0.5, -2), -1)
 
+        self.assertNotEqual(multiply(0.5, -2), 0)
+
+
+    def test_number_multiply_complex(self):
+        # test number case
         # multiply complex on complex
         self.assertEqual(multiply(complex(0, 1), complex(0, 1)), -1)
+
+
+    def test_number_multiply_zero(self):
+        # test number case
+        # multiply 0 on number
+        self.assertEqual(multiply(0, 5), 0)
+        self.assertEqual(multiply(5, 0), 0)
+        self.assertEqual(multiply(0, 0), 0)
+
+        self.assertNotEqual(multiply(0, 0), 1)
+
 
 
     # division() block
@@ -119,17 +139,18 @@ class TestCalc(unittest.TestCase):
 
 
 class TestEmployee(unittest.TestCase):
+    def setUp(self) -> None:
+        self.employee = Employee('1', '2', 3)
+        self.employee_int = Employee(1, 2, 3)
+        self.employee_str = Employee('1', '2', '12')
+
     def test_email(self):
-        test_e = Employee('1', '2', 3)
-        self.assertEqual(test_e.email, '1.2@email.com')
-        test_e = Employee(1, 2, 3)
-        self.assertEqual(test_e.email, '1.2@email.com')
+        self.assertEqual(self.employee.email, '1.2@email.com')
+        self.assertEqual(self.employee_int.email, '1.2@email.com')
 
     def test_fullname(self):
-        test_e = Employee('1', '2', 3)
-        self.assertEqual(test_e.fullname, '1 2')
-        test_e = Employee(1, 2, 3)
-        self.assertEqual(test_e.fullname, '1 2')
+        self.assertEqual(self.employee.fullname, '1 2')
+        self.assertEqual(self.employee_int.fullname, '1 2')
 
     def test_apply_raise(self):
         test_e = Employee('1', '2', 1)
@@ -137,13 +158,10 @@ class TestEmployee(unittest.TestCase):
         test_e.apply_raise()
 
         self.assertEqual(test_e.pay, int(pr_pay*1.05))
-        with self.assertRaises(TypeError):
-            test_e = Employee('1', '2', '12')
-            test_e.apply_raise()
 
         with self.assertRaises(TypeError):
             test_e = Employee('1', '2', '12')
-            test_e.apply_raise()
+            self.employee_str.apply_raise()
 
     def mock_request(self):
         class Requests:
@@ -155,8 +173,7 @@ class TestEmployee(unittest.TestCase):
     @mock.patch('homework_3.tests_simple_employee.requests',
                 side_effect=mock_request)
     def test_monthly_schedule(self, response):
-        test_e = Employee('1', '2', 1)
-        test_e.monthly_schedule(11)
+        self.employee.monthly_schedule(11)
 
 
 if __name__ == '__main__':
