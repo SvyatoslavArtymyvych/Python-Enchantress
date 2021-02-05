@@ -49,17 +49,15 @@ class TestPositiveDatabaseCRUD(TestCase):
 
         self.db.create_cart(self.cart)
 
-        self.assertEqual(self.db.read_cart(self.db.get_last_cart_id()),
-                         [(5, 'Orange', 1), (5, 'Apple', 2), (5, 'Pear', 3)])
+        self.assertEqual(self.db.read_cart(self.cart_id), [(5, 'Orange', 1), (5, 'Apple', 2), (5, 'Pear', 3)])
 
         self.db.update_cart(self.cart_new)
 
-        self.assertEqual(self.db.read_cart(self.db.get_last_cart_id()),
-                         [(5, 'Pineapple', 1), (5, 'Mandarin', 2)])
+        self.assertEqual(self.db.read_cart(self.cart_id), [(5, 'Pineapple', 1), (5, 'Mandarin', 2)])
 
-        self.db.delete_cart(self.db.get_last_cart_id())
+        self.db.delete_cart(self.cart_id)
 
-        self.assertEqual(self.db.read_cart(self.db.get_last_cart_id() + 1), [])
+        self.assertEqual(self.db.read_cart(self.cart_id + 1), [])
 
         self.db.delete_user(self.user_id)
 
@@ -71,7 +69,6 @@ class TestNegativeDatabaseCRUD(TestCase):
 
     def test_crud_user(self):
         new_info = {'name': 'Igorko', 'email': 'igor_new@gmail.com', 'registration_time': '2021-03-05 15:31:26'}
-        self.user_id = self.db.get_last_user_id()
 
         self.db.create_user(self.user)
         self.user_id = self.db.get_last_user_id()
@@ -109,16 +106,14 @@ class TestNegativeDatabaseCRUD(TestCase):
 
         self.db.create_cart(self.cart)
 
-        self.assertNotEqual(self.db.read_cart(self.db.get_last_cart_id()),
-                            [(5, 'Banana', 1), (5, 'Orange', 2), (5, 'Melon', 3)])
+        self.assertNotEqual(self.db.read_cart(self.cart_id), [(5, 'Banana', 1), (5, 'Orange', 2), (5, 'Melon', 3)])
 
         self.db.update_cart(self.cart_new)
 
-        self.assertNotEqual(self.db.read_cart(self.db.get_last_cart_id()),
-                            [(5, 'Potato', 1), (5, 'Carrot', 2)])
+        self.assertNotEqual(self.db.read_cart(self.cart_id), [(5, 'Potato', 1), (5, 'Carrot', 2)])
 
-        self.db.delete_cart(self.db.get_last_cart_id())
+        self.db.delete_cart(self.cart_id)
 
-        self.assertNotEqual(self.db.read_cart(self.db.get_last_cart_id() + 1), [(5, 'Potato', 1), (5, 'Carrot', 2)])
+        self.assertNotEqual(self.db.read_cart(self.cart_id + 1), [(5, 'Potato', 1), (5, 'Carrot', 2)])
 
-        self.db.delete_user(self.user_id)
+        self.db.delete_user(self.user_id + 1)

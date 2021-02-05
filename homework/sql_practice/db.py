@@ -55,9 +55,6 @@ class DatabaseClass:
     def update_cart(self, cart: dict):
         self.c.execute("UPDATE cart SET creation_time = %(creation_time)s "
                        "WHERE user_id = %(user_id)s", cart)
-        # for product in cart['cart_details']:
-        #     self.c.execute("UPDATE cart_details SET product = %(product)s, price = %(price)s "
-        #                    "WHERE cart_id = %(cart_id)s", product)
         self.c.execute('DELETE FROM cart_details WHERE cart_id = '
                        '(SELECT id FROM cart WHERE user_id = %s)' % cart["user_id"])
         for product in cart['cart_details']:
