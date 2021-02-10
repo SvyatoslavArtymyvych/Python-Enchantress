@@ -16,10 +16,10 @@ def test_create_user(store_app):
         '/users',
         json={
             "name": "Illia",
-	    "email": "illia.sukonnik@gmail.com",
-	})
+            "email": "illia.sukonnik@gmail.com",
+        })
     assert response.status_code == 201
     assert response.json == {
         "user_id": 1,
-	"registration_timestamp": '2021-02-08T14:16:41'
+        "registration_timestamp": '2021-02-08T14:16:41'
     }
