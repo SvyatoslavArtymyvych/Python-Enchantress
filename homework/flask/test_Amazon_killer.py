@@ -1,5 +1,5 @@
 from freezegun import freeze_time
-from main import amazon_killer as app
+from Amazon_killer import amazon_killer as app
 import pytest
 
 
