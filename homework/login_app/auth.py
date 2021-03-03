@@ -1,67 +1,57 @@
 from flask_login import login_user, logout_user, login_required
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import request
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
+from flask_restful import Resource
 
 from . import db
 
 
-auth = Blueprint('auth', __name__)
+class Login(Resource):
+    def get(self):
+        return {"message": "Please enter your email and password"}, 200
+
+    def post(self):
+        response = request.get_json()
+        email = response['email']
+        password = response['password']
+        remember = True if bool(response['remember']) else False
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user or not check_password_hash(user.password, password):
+            return {"error": "User doesn't exist or password is wrong"}, 404
+
+        login_user(user, remember=remember)
+        login_user(user)
+        return {"status": "success"}, 200
 
 
-@auth.route('/login')
-def login():
-    return render_template('login.html')
+class SignUp(Resource):
+    def get(self):
+        return {"message": "Please enter your email, name and password"}, 200
+
+    def post(self):
+        data = request.get_json()
+        email = data['email']
+        name = data['name']
+        password = data['password']
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            return {"error": "email address already exists"}, 404
+
+        new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return {"status": "success"}, 200
 
 
-@auth.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
-@auth.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('main.index'))
-
-
-@auth.route('/signup', methods=['POST'])
-def signup_post():
-    email = request.form.get('email')
-    name = request.form.get('name')
-    password = request.form.get('password')
-
-    user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
-
-    if user: # if a user is found, we want to redirect back to signup page so user can try again
-        flash('Email address already exists')
-        return redirect(url_for('auth.signup'))
-
-    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
-
-    # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(url_for('auth.login'))
-
-
-@auth.route('/login', methods=['POST'])
-def login_post():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
-
-    user = User.query.filter_by(email=email).first()
-
-    # check if the user actually exists
-    # take the user-supplied password, hash it, and compare it to the hashed password in the database
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
-
-    # if the above check passes, then we know the user has the right credentials
-    login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+class LogOut(Resource):
+    @login_required
+    def get(self):
+        logout_user()
+        return {"status": "success"}, 200
