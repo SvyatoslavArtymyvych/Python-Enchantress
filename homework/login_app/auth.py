@@ -23,7 +23,6 @@ class Login(Resource):
             return {"error": "User doesn't exist or password is wrong"}, 404
 
         login_user(user, remember=remember)
-        login_user(user)
         return {"status": "success"}, 200
 
 
