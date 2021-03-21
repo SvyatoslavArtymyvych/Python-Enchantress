@@ -13,7 +13,8 @@ def create_app():
     api = Api(app=app)
 
     app.config['SECRET_KEY'] = 'my_secret'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://svyatoslav:pass@localhost:5432/svyatoslav'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
