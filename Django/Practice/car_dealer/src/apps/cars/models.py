@@ -66,7 +66,7 @@ class CarProperty(models.Model):
 
 
 class Picture(models.Model):
-    car_id = models.ForeignKey(to=Car, on_delete=models.CASCADE)
+    car_id = models.ForeignKey(to=Car, on_delete=models.CASCADE, related_name='photos')
     url = models.ImageField(verbose_name="Car photo", null=True, blank=True)
     position = models.CharField(max_length=30)
     metadata = models.CharField(max_length=30)

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block main_container %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="col-md-4 mb-3">
+            <label for="validationCustom01">Country name:</label>
+            {{ form.name }}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="validationCustom01">Country code:</label>
+            {{ form.code }}
+        </div>
+        <input type="submit" value="Create">
+    </form>
+
+{% endblock %}

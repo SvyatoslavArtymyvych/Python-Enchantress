@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block main_container %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    {% for dealer in dealers %}
+        {% include 'particles/card.html' %}
+    {% endfor %}
+</div>
+{% endblock %}
