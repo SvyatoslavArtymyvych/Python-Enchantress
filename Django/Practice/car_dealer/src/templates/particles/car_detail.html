@@ -174,44 +174,6 @@
     <h1>${{ car.price }}</h1>
 </div>
 <div class="d-flex flex-row-reverse">
-    <a href="#" class="btn btn-primary btn-lg btn btn-warning" role="button" aria-pressed="true"><h4 class="fw-bold">
+    <a href="order" class="btn btn-primary btn-lg btn btn-warning" role="button" aria-pressed="true"><h4 class="fw-bold">
         Order</h4></a>
 </div>
-
-{#{% for car in car_list %}#}
-{##}
-{#    <p class="fs-1">{{ car.grouper }}</p>#}
-{#    <p>#}
-{#    {% for item in car.list %}#}
-{#        <div class="card" style="width: 18rem;">#}
-{##}
-{#            {% if item.photos.first %}#}
-{#                <img class="card-img-top" src="{% static "media/" %}{{ item.photos.first.url }}" alt="{{ item.photos.first.metadata }}">#}
-{##}
-{#            {% else %}#}
-{#                <img class="card-img-top" src="{% static "media/car_default.jpeg" %}" alt="default car image">#}
-{#            {% endif %}#}
-{##}
-{#            <div class="card-body">#}
-{#                <h5 class="card-title">{{ item.model_id.name }}</h5>#}
-{#                <p class="card-text">#}
-{#                    <dl class="row">#}
-{#                      <dt class="col">Color</dt>#}
-{#                      <dd class="col">{{ item.color_id.name }}</dd>#}
-{#                    </dl>#}
-{#                    <dl class="row">#}
-{#                      <dt class="col">Engine</dt>#}
-{#                      <dd class="col">{{ item.engine_type }}</dd>#}
-{#                    </dl>#}
-{#                    <dl class="row">#}
-{#                      <dt class="col">Gear case</dt>#}
-{#                      <dd class="col">{{ item.gear_case }}</dd>#}
-{#                    </dl>#}
-{#                    <p class="fs-4 fw-bold">${{ item.price }}</p>#}
-{#                </p>#}
-{#                <a href="{{ item.id }}" class="btn btn-primary">More details</a>#}
-{#            </div>#}
-{#        </div>#}
-{#    {% endfor %}#}
-{#    </p>#}
-{#{% endfor %}#}

@@ -18,15 +18,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from apps.cars.views import car_api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.home.urls')),
-    path('countries/', include('apps.dealers.urls')),
+    path('', include('apps.dealers.urls')),
     path('cars/', include('apps.cars.urls')),
+    path('newsletter/', include('apps.newsletters.urls')),
 
-    path('api/cars/<int:id>/', car_api, name='car_api'),
+    path('api/', include('apps.api.urls'), name='api_auth'),
 ]
 
 if settings.DEBUG:

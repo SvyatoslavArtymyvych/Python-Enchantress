@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 
 
 # Create your views here.
@@ -24,3 +23,5 @@ class HomePage(TemplateView):
         context['dealers'] = Dealer.objects.all().order_by('-id')
 
         return context
+
+

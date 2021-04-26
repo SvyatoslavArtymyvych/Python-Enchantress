@@ -20,7 +20,7 @@ class Brand(models.Model):
 
 
 class Model(models.Model):
-    brand_id = models.ForeignKey(to=Brand, on_delete=models.PROTECT)
+    brand = models.ForeignKey(to=Brand, on_delete=models.PROTECT)
     name = models.CharField(max_length=35, unique=True)
 
     def __str__(self):
@@ -28,9 +28,9 @@ class Model(models.Model):
 
 
 class Car(models.Model):
-    color_id = models.ForeignKey(to=Color, on_delete=models.PROTECT)
-    dealer_id = models.ForeignKey(to='dealers.Dealer', on_delete=models.CASCADE, db_index=True)
-    model_id = models.ForeignKey(to=Model, on_delete=models.DO_NOTHING, db_index=True)
+    color = models.ForeignKey(to=Color, on_delete=models.PROTECT)
+    dealer = models.ForeignKey(to='dealers.Dealer', on_delete=models.CASCADE, db_index=True)
+    model = models.ForeignKey(to=Model, on_delete=models.DO_NOTHING, db_index=True)
     engine_type = models.CharField(max_length=20)
     population_type = models.CharField(max_length=1, choices=POPULATIONS_TYPES_CHOICES)
     price = models.FloatField()
@@ -44,9 +44,10 @@ class Car(models.Model):
     sitting_place = models.IntegerField(default=2)
     first_registration_date = models.DateTimeField()
     engine_power = models.FloatField()
+    publish = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.dealer_id.title} | {self.model_id.name} | {self.color_id.name}'
+        return f'{self.dealer.title} | {self.model.name} | {self.color.name}'
 
 
 class Property(models.Model):
@@ -58,25 +59,25 @@ class Property(models.Model):
 
 
 class CarProperty(models.Model):
-    property_id = models.ForeignKey(to=Property, on_delete=models.CASCADE)
-    car_id = models.ForeignKey(to=Car, on_delete=models.CASCADE)
+    property = models.ForeignKey(to=Property, on_delete=models.CASCADE)
+    car = models.ForeignKey(to=Car, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.car_id.model_id.name} | {self.property_id.name}'
+        return f'{self.car.model.name} | {self.property.name}'
 
 
 class Picture(models.Model):
-    car_id = models.ForeignKey(to=Car, on_delete=models.CASCADE, related_name='photos')
+    car = models.ForeignKey(to=Car, on_delete=models.CASCADE, related_name='photos')
     url = models.ImageField(verbose_name="Car photo", null=True, blank=True)
     position = models.CharField(max_length=30)
     metadata = models.CharField(max_length=30)
 
     def __str__(self):
-        return f'{self.car_id.model_id.name} | {self.metadata}'
+        return f'{self.car.model.name} | {self.metadata}'
 
 
 class Order(models.Model):
-    car_id = models.ForeignKey(to=Car, on_delete=models.SET('Sold'))
+    car = models.ForeignKey(to=Car, on_delete=models.SET('Sold'))
     status = models.CharField(max_length=1, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_OPEN)
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)

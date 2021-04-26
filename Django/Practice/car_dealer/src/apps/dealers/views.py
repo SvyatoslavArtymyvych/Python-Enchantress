@@ -1,12 +1,16 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
 from django.views import generic
 
-from apps.dealers.models import Country, City
 from django.views.generic import TemplateView
+from django.views import View
+
+from apps.dealers.models import Country, City
+from apps.dealers.forms import LoginForm, RegisterForm
 
 
 class CountryCreateForm(generic.CreateView):
@@ -26,21 +30,71 @@ class CountriesList(TemplateView):
         return context
 
 
-# class LoginView(View):
-#     def get(self, request):
-#         return render(request=request,
-#                       template_name='',
-#                       context={})
-#
-#     def post(self, request):
-#         user_name = request.POST.get('username')
-#         password = request.POST.get('password')
-#
-#         if user_name and password:
-#             user = authenticate(user_name=user_name, password=password)
-#
-#             if user:
-#                 login(request, user)
-#                 return HttpResponseRedirect('')
-#
-#         return HttpResponseRedirect('')
+class LoginView(View):
+    form = LoginForm
+
+    def get(self, request):
+        return self._login_page(request, context={})
+
+    def _login_page(self, request, context=None):
+        context = context or {}
+        context['login_form'] = self.form()
+
+        return render(request=request, template_name='pages/login.html', context=context)
+
+    def post(self, request):
+        form = self.form(request.POST)
+
+        if form.is_valid():
+            login(request, form.cleaned_data['user'])
+            return HttpResponseRedirect('/')
+
+        return self._login_page(request, {"errors": form.non_field_errors()})
+
+
+class RegisterView(View):
+    form = RegisterForm
+
+    def get(self, request):
+        return self._register_page(request, context={})
+
+    def _register_page(self, request, context=None):
+        context = context or {}
+        context['register_form'] = self.form()
+
+        return render(request=request, template_name='pages/register.html', context=context)
+
+    def post(self, request):
+        form = self.form(request.POST)
+
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return HttpResponseRedirect('/')
+
+        return self._register_page(request, {"errors": form.non_field_errors()})
+
+
+@login_required(login_url='/login/')
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/login/')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

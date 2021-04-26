@@ -13,16 +13,16 @@ class Country(models.Model):
 
 class City(models.Model):
     name = models.CharField(max_length=30, unique=True)
-    country_id = models.ForeignKey(to=Country, on_delete=models.CASCADE, null=True)
+    country = models.ForeignKey(to=Country, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.country_id.name} | {self.name}'
+        return f'{self.country.name} | {self.name}'
 
 
 class Dealer(AbstractUser):
     title = models.CharField(max_length=25)
     email = models.CharField(max_length=30, unique=True)
-    city_id = models.ForeignKey(to=City, on_delete=models.SET_NULL, null=True)
+    city = models.ForeignKey(to=City, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.title

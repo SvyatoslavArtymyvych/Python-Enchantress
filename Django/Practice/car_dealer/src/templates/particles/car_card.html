@@ -1,5 +1,5 @@
 {% load static %}
-{% regroup cars by dealer_id as car_list %}
+{% regroup cars by dealer as car_list %}
 
 
 {% for car in car_list %}

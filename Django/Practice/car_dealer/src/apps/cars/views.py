@@ -1,12 +1,13 @@
-from django.core import serializers
-from django.http import HttpResponse
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 # Create your views here.
-from django.views import generic
+from django.views import View
 
 from apps.cars.models import Car, Picture
 from django.views.generic import TemplateView
+
+from apps.cars.forms import OrderForm
 
 
 class ShowCars(TemplateView):
@@ -31,19 +32,25 @@ class CarDetails(TemplateView):
         return context
 
 
-class CreateCarCreatingView(generic.CreateView):
-    pass
-    # model = Car
-    #
-    # fields = ['color_id']
-    #
-    # template_name = 'cars/create_car_form.html'
+class OrderView(View):
+    form = OrderForm
 
+    def get(self, request, **kwargs):
+        return self._order_page(request, **kwargs)
 
-def car_api(request, id):
-    car = Car.objects.filter(id=id).first()
-    if car:
-        data = serializers.serialize('json', [car])
-    else:
-        data = '{"error":"car does not exists"}'
-    return HttpResponse(data)
+    def _order_page(self, request, context=None, **kwargs):
+        context = context or {}
+        context['order_form'] = self.form()
+
+        context['car'] = Car.objects.filter(id=kwargs.get('car_id'))[0]
+
+        return render(request=request, template_name='pages/order.html', context=context)
+
+    def post(self, request, **kwargs):
+        form = self.form(request.POST, car=kwargs.get('car_id'))
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/cars')
+
+        return self._order_page(request, {"errors": form.non_field_errors()}, car_id=kwargs.get('car_id'))

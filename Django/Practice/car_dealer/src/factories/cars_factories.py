@@ -4,6 +4,7 @@ from datetime import date
 from src.apps.cars import models
 from . import dealer_factories
 
+
 class ColorFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Color
