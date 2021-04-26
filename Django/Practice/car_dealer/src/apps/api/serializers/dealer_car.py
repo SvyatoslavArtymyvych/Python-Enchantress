@@ -8,7 +8,7 @@ class DealerCarAPISerializer(serializers.ModelSerializer):
     model = serializers.CharField()
 
     def create(self, validated_data):
-        validated_data['dealer'] = self.context['request'].user #Dealer.objects.get(title=self.context['request'].user)
+        validated_data['dealer'] = self.context['request'].user
 
         validated_data['color'], created = Color.objects.get_or_create(name=validated_data['color'])
 
@@ -46,3 +46,9 @@ class CarPublishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         exclude = ['publish', ]
+
+
+class CarStatisticsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Car
+        fields = ['id', 'views']

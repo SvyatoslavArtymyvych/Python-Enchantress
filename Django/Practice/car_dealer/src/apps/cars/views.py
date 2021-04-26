@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
@@ -27,7 +28,8 @@ class CarDetails(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['car'] = Car.objects.filter(id=context['car_id'])[0]
+        context['car'] = Car.objects.get(id=context['car_id'])
+        Car.objects.filter(id=context['car_id']).update(views=F('views') + 1)
 
         return context
 

@@ -45,6 +45,7 @@ class Car(models.Model):
     first_registration_date = models.DateTimeField()
     engine_power = models.FloatField()
     publish = models.BooleanField(default=True)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return f'{self.dealer.title} | {self.model.name} | {self.color.name}'

@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 
 # Create your views here.
+from django.db.models import F
 from rest_framework import generics
 
 from rest_framework.authtoken.models import Token
@@ -20,6 +21,8 @@ from apps.api.serializers.dealer_car import CarPublishSerializer
 
 from apps.cars.models import Car
 from apps.cars.models import Order
+
+from src.apps.api.serializers.dealer_car import CarStatisticsSerializer
 
 
 class LoginAPIView(APIView):
@@ -61,12 +64,23 @@ class OrderAPIView(CreateAPIView):
     queryset = Order.objects.all()
 
 
-class CarAPIView(ListAPIView):
+class CarsAPIView(ListAPIView):
     serializer_class = CarAPISerializer
     queryset = Car.objects.filter(publish=True)
     filter_backends = [SearchFilter]
 
     search_fields = ['brand__title', 'model__name']
+
+
+class CarAPIView(ListAPIView):
+    serializer_class = CarAPISerializer
+    filter_backends = [SearchFilter]
+
+    def get_queryset(self):
+        car_id = self.kwargs['pk']
+
+        Car.objects.filter(id=car_id).update(views=F('views') + 1)
+        return Car.objects.filter(id=car_id, publish=True)
 
 
 class DealerCarsAPIView(ListAPIView):
@@ -127,3 +141,12 @@ class CarPublishAPI(viewsets.ViewSet):
         Car.objects.filter(id=car_id).update(publish=False)
 
         return Response({'message': 'unpublish'})
+
+
+class CarStatisticsApi(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = CarStatisticsSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Car.objects.filter(dealer=self.request.user)
