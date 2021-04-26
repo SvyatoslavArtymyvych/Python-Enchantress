@@ -1,0 +1,14 @@
+{% regroup cities by country_id as city_list %}
+
+{% for city in city_list %}
+
+    <ul class="list-group">
+        <li class="list-group-item active">{{ city.grouper }}</li>
+
+        {% for item in city.list %}
+            <li class="list-group-item">{{ item.name }}</li>
+        {% endfor %}
+
+    </ul>
+
+{% endfor %}

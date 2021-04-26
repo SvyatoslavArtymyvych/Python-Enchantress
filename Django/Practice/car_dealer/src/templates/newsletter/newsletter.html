@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block main_container %}
+
+    <div class="d-flex justify-content-center">
+        <main class="form-signin col-md-4 col-md-offset-4">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-floating">
+                    <input name="email" class="form-control" id="floatingInput" placeholder="Email"
+                           required="True">
+                    <label for="floatingInput">Email</label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Subscribe</button>
+            </form>
+            {% if errors %}
+                <div class="container">
+                    {% for error in errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </main>
+    </div>
+
+{% endblock %}

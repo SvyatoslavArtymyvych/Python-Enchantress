@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block main_container %}
+
+    <div class="d-flex justify-content-center">
+        <main class="form-signin col-md-4 col-md-offset-4">
+            <form method="post" action="{% url 'dealers:login-page' %}">
+                {% csrf_token %}
+
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+                <div class="form-floating">
+                    <input name="username" class="form-control" id="floatingInput" placeholder="username"
+                           required="True">
+                    <label for="floatingInput">Username</label>
+                </div>
+
+                <div class="form-floating">
+                    <input name="password" type="password" class="form-control" id="floatingPassword"
+                           placeholder="Password" required="True">
+                    <label for="floatingPassword">Password</label>
+                </div>
+
+                <div class="checkbox mb-3 d-flex justify-content-end">
+                    <label>
+                        <input name="remember_me" type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+
+                {% if errors %}
+                    <div class="container">
+                        {% for error in errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            </form>
+                <a class="w-100 btn btn-lg btn-secondary" href="/register/" style="margin-top: 10px;">Sign up</a>
+        </main>
+    </div>
+
+{% endblock %}
